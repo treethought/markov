@@ -26,18 +26,18 @@ import (
 
 // genCmd represents the gen command
 var genCmd = &cobra.Command{
-	Use:   "gen",
-	Short: "Generate markov text",
+	Use:   "gen [corpus]",
+	Short: "Generate markov text from corpus file",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gen called")
-
 		c := markov.New()
-		data, err := ioutil.ReadFile("resources/shakespeare.txt")
+
+		corpus := args[0]
+		data, err := ioutil.ReadFile(corpus)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
-
 		c.FromString(string(data))
 		c.Generate()
 
@@ -47,14 +47,4 @@ var genCmd = &cobra.Command{
 func init() {
 	log.SetLevel(log.InfoLevel)
 	rootCmd.AddCommand(genCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// genCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// genCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
